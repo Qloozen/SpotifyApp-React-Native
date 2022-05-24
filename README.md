@@ -1,0 +1,1 @@
+Spotify application in React-Native typescript
