@@ -5,13 +5,11 @@ import {
   View,
 } from 'react-native';
 
-
+import { LoginScreen } from './src/screens/Login/loginScreen';
 
 const App = () => {
   return (
-    <View>
-      <Text>App.tsx</Text>
-    </View>
+    <LoginScreen />
   );
 };
 
