@@ -5,11 +5,16 @@ import {
   View,
 } from 'react-native';
 
+import { Provider } from 'react-redux';
+import { store, persistor } from './src/redux/store/store';
+
 import { LoginScreen } from './src/screens/Login/loginScreen';
 
 const App = () => {
   return (
-    <LoginScreen />
+    <Provider store={store}>
+      <LoginScreen />
+    </Provider>
   );
 };
 
