@@ -8,12 +8,11 @@ import {
 import { Provider } from 'react-redux';
 import { store, persistor } from './src/redux/store/store';
 
-import { LoginScreen } from './src/screens/Login/loginScreen';
-
+import { HomeStack } from './src/Navigation/HomeStack';
 const App = () => {
   return (
     <Provider store={store}>
-      <LoginScreen />
+      <HomeStack />
     </Provider>
   );
 };

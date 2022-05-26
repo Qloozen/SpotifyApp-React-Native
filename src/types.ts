@@ -31,6 +31,6 @@ export interface Artist {
 
 export interface Image {
     height: Number,
-    url: String,
+    url: string,
     width: Number
 }

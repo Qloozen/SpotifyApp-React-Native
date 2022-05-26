@@ -4,8 +4,8 @@ class AuthenticationHandler {
     spotifyAuthConfig: AuthConfiguration;
     constructor() {
         this.spotifyAuthConfig = {
-            clientId: '6b3f78b71ea64ae58fbd17de05a22f9b',
-            redirectUrl: 'com.spotifyapp://callback',
+            clientId: '...',
+            redirectUrl: '...',
             scopes: [
                 'playlist-read-private',
                 'playlist-modify-public',
@@ -14,9 +14,10 @@ class AuthenticationHandler {
                 'user-library-modify',
                 'user-top-read',
             ],
+            usePKCE: false,
             serviceConfiguration: {
                 authorizationEndpoint: 'https://accounts.spotify.com/authorize',
-                tokenEndpoint: 'https://accounts.spotify.com/api/token',
+                tokenEndpoint: '...',
             },
         };
     }
