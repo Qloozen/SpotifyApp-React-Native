@@ -21,7 +21,7 @@ export const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
         dispatch(setAccessToken(authenticationObject?.accessToken))
         dispatch(setRefreshToken(authenticationObject?.refreshToken))
         if (authenticationObject?.accessToken != undefined) {
-            navigation.navigate("Home")
+            navigation.replace("HomeStack")
         }
     }
 

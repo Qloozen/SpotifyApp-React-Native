@@ -8,11 +8,11 @@ import {
 import { Provider } from 'react-redux';
 import { store, persistor } from './src/redux/store/store';
 
-import { HomeStack } from './src/Navigation/HomeStack';
+import { MainStack } from './src/Navigation/MainStack';
 const App = () => {
   return (
     <Provider store={store}>
-      <HomeStack />
+      <MainStack />
     </Provider>
   );
 };

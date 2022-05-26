@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const authenticationConfig = {
     key: 'authentication',
     storage: AsyncStorage,
-    blacklist: ['accessToken'],
+    blacklist: [],
 };
 
 const rootReducer = combineReducers({
