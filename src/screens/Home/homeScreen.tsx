@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Button, Text, FlatList } from 'react-native';
+import { useState } from 'react';
+import { View, Button, Text, FlatList, TextInput } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import * as types from '../../types';
+import { Track, TrackWrapper, TracksResponse } from '../../types'
+import { globalStyles } from '../../styles/globalStyles';
 
 import { useAppSelector, useAppDispatch } from '../../redux/hooks/hooks';
 import { setTracks } from '../../redux/features/Tracks/TracksSlice';
@@ -16,7 +18,8 @@ type homeProps = NativeStackScreenProps<RootStackParamList, "Home">
 const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
     const tracks = useAppSelector((state) => state.root.tracks.tracks)
     const token = useAppSelector((state) => state.root.authentication.accessToken)
-
+    const [filteredList, setFilteredList] = useState(new Array<TrackWrapper>());
+    const [term, setTerm] = useState("");
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -28,7 +31,7 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
             }
         })
             .then(response => response.json())
-            .then((res: types.TracksResponse) => {
+            .then((res: TracksResponse) => {
                 dispatch(setTracks(res.items))
             })
     }, [])
@@ -39,12 +42,23 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
         navigation.replace("Login")
     }
 
+    const filterHandler = (e: string) => {
+        setTerm(e)
+        const list: TrackWrapper[] = tracks.filter(wrapper => wrapper.track.name.toLowerCase().includes(e.toLowerCase()) || wrapper.track.artists[0].name.toLowerCase().includes(e.toLowerCase()))
+        setFilteredList(list)
+    }
+
     return (
         <View>
             <Button title="Logout" onPress={handleLogout} />
-            <Text>Hello</Text>
+            <TextInput
+                style={globalStyles.input}
+                onChangeText={(e) => { filterHandler(e) }}
+                value={term}
+                placeholder="useless placeholder"
+            />
             <FlatList
-                data={tracks}
+                data={filteredList}
                 renderItem={({ item }) => (
                     <TrackCard track={item.track} />
                 )}
