@@ -1,5 +1,4 @@
 import { AuthConfiguration, authorize, refresh } from 'react-native-app-auth';
-import { CLIENT_ID, REDIRECT_URL, TOKEN_ENDPOINT } from '@env';
 
 class AuthenticationHandler {
     spotifyAuthConfig: AuthConfiguration;

@@ -4,7 +4,6 @@ import { View, ActivityIndicator, Text } from 'react-native';
 import { useAppSelector } from '../../redux/hooks/hooks';
 import { RootStackParamList } from '../../Navigation/navigationTypes';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { CLIENT_ID } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type splashProps = NativeStackScreenProps<RootStackParamList, "Splash">
