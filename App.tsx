@@ -5,13 +5,15 @@ import {
   View,
 } from 'react-native';
 
+import { Provider } from 'react-redux';
+import { store, persistor } from './src/redux/store/store';
 
-
+import { HomeStack } from './src/Navigation/HomeStack';
 const App = () => {
   return (
-    <View>
-      <Text>App.tsx</Text>
-    </View>
+    <Provider store={store}>
+      <HomeStack />
+    </Provider>
   );
 };
 
