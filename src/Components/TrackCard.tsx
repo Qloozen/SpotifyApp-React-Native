@@ -1,11 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity, Button, Modal, Pressable } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Button, Modal, Pressable, ToastAndroid } from "react-native";
 import { globalStyles } from "../styles/globalStyles";
 import { Track, TracksResponse } from "../types";
 import TrackDetails from "./TrackDetails";
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilteredTracks, setLastRemovedTrack, setTracks } from "../redux/features/Tracks/TracksSlice";
+import axios from "axios";
 
 
 
@@ -31,30 +32,25 @@ const TrackCard: React.FC<TrackCardProps> = ({ track, buttonText }) => {
     const restoreHandler = () => {
         console.log("onRestoreHandler called")
 
-        AsyncStorage.getItem('persist:authentication').then((value) => {
-            let token: string = JSON.parse(value || "{}").accessToken
-            token = token.replace('"', '')
-            fetch(`${process.env.BASE_URL}/user/savedTracks/${track.id}`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
+        axios({
+            method: 'post',
+            url: `${process.env.BASE_URL}/user/savedTracks/${track.id}`
+        })
+        .then(() => {
+            return axios({
+                method: 'get',
+                url: `${process.env.BASE_URL}/user/savedTracks`
             })
-                .then(response => {
-                    return fetch(`${process.env.BASE_URL}/user/savedTracks`, {
-                        method: "GET",
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                    })
-                })
-                .then(response => response.json())
-                .then((res: TracksResponse) => {
-                    dispatch(setLastRemovedTrack(null));
-                    dispatch(setTracks(res.items))
-                    dispatch(setFilteredTracks(res.items))
-                })
-
+        })
+        .then(res => res.data)
+        .then((res: TracksResponse) => {
+            ToastAndroid.show('Track restored', ToastAndroid.SHORT);
+            dispatch(setLastRemovedTrack(null));
+            dispatch(setTracks(res.items))
+            dispatch(setFilteredTracks(res.items))
+        })
+        .catch(err => {
+            console.log(err)
         })
     }
 
