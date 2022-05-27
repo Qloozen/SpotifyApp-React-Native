@@ -1,13 +1,49 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from "react-native";
+import { useDispatch, useSelector } from 'react-redux';
 import { globalStyles } from "../styles/globalStyles";
-import { Track } from "../types";
+import { Track, TracksResponse } from "../types";
+import { setTracks, setFilteredTracks, setLastRemovedTrack } from '../redux/features/Tracks/TracksSlice';
 
 interface TrackCardProps {
-    track: Track
+    track: Track,
+    setModalVisible: any
 }
 
-const TrackDetails: React.FC<TrackCardProps> = ({ track }) => {
+const TrackDetails: React.FC<TrackCardProps> = ({ track, setModalVisible }) => {
+    const dispatch = useDispatch();
+
+    const onRemoveHandler = () => {
+        console.log("onRemoveHandler called")
+        AsyncStorage.getItem('persist:authentication').then((value) => {
+            let token: string = JSON.parse(value || "{}").accessToken
+            token = token.replace('"', '')
+            console.log(token)
+            fetch(`${process.env.BASE_URL}/user/savedTracks/${track.id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            })
+                .then(response => {
+                    return fetch(`${process.env.BASE_URL}/user/savedTracks`, {
+                        method: "GET",
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                    })
+                })
+                .then(response => response.json())
+                .then((res: TracksResponse) => {
+                    dispatch(setLastRemovedTrack(track));
+                    dispatch(setTracks(res.items))
+                    dispatch(setFilteredTracks(res.items))
+                    setModalVisible(false)
+                })
+
+        })
+    }
     return (
         <View style={styles.card}>
             <Image
@@ -20,7 +56,7 @@ const TrackDetails: React.FC<TrackCardProps> = ({ track }) => {
             <Text style={[globalStyles.textWhite, { textAlign: "center" }]}>{track.artists[0].name}</Text>
 
             <View style={styles.actions}>
-                <Text style={styles.text}>Remove</Text>
+                <Button title="remove" onPress={onRemoveHandler} />
             </View>
         </View>
     )

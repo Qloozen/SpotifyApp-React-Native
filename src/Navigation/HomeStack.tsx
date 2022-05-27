@@ -18,12 +18,9 @@ export const HomeStack = () => {
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                    position: 'absolute',
-                    borderTopWidth: 0,
-                    elevation: 0,
-                    height: 70
-                }
+                    backgroundColor: '#121212',
+                },
+                tabBarHideOnKeyboard: true
             }}
         >
             <Tab.Screen name="Home" component={HomeScreen} options={{

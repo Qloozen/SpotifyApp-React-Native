@@ -6,6 +6,11 @@ export const globalStyles = StyleSheet.create({
         padding: 10,
         backgroundColor: "#121212"
     },
+    headerText: {
+        fontSize: 28,
+        fontWeight: "bold",
+        color: "white",
+    },
     textBlack: {
         color: "black"
     },
@@ -13,8 +18,11 @@ export const globalStyles = StyleSheet.create({
         color: "white"
     },
     input: {
+        width: "70%",
+        alignSelf: "center",
         borderWidth: 2,
-        padding: 10,
-        color: "black"
+        padding: 8,
+        borderColor: "#969696",
+        borderRadius: 10
     }
 })
