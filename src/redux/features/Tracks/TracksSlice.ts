@@ -1,14 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TrackWrapper } from '../../../types'
+import { TrackWrapper, Track } from '../../../types'
 
 // Slice state type
 interface TrackState {
-    tracks: TrackWrapper[]
+    tracks: TrackWrapper[],
+    filteredTracks: TrackWrapper[],
+    lastRemovedTrack: Track | null
 }
 
 // Initial state
 const initialState: TrackState = {
-    tracks: []
+    tracks: [],
+    filteredTracks: [],
+    lastRemovedTrack: null
 }
 
 const trackSlice = createSlice({
@@ -17,12 +21,20 @@ const trackSlice = createSlice({
     reducers: {
         setTracks(state, action: PayloadAction<TrackWrapper[]>) {
             state.tracks = action.payload
-        }
+        },
+        setFilteredTracks(state, action: PayloadAction<TrackWrapper[]>) {
+            state.filteredTracks = action.payload
+        },
+        setLastRemovedTrack(state, action: PayloadAction<Track | null>) {
+            state.lastRemovedTrack = action.payload
+        },
     },
 });
 
 export const {
-    setTracks
+    setTracks,
+    setFilteredTracks,
+    setLastRemovedTrack
 } = trackSlice.actions;
 
 export default trackSlice.reducer;
