@@ -2,9 +2,9 @@ import React from 'react';
 import { useState } from 'react';
 import { View, Button, Text, FlatList, TextInput, RefreshControl, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { TracksResponse, TrackWrapper } from '../../types'
+import { TrackWrapper } from '../../types'
 import { globalStyles } from '../../styles/globalStyles';
-import { setFilteredTracks, setTracks } from '../../redux/features/Tracks/TracksSlice';
+import { setFilteredTracks } from '../../redux/features/Tracks/TracksSlice';
 
 
 import { useAppSelector } from '../../redux/hooks/hooks';
@@ -13,8 +13,7 @@ import TrackCard from '../../Components/TrackCard';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../Navigation/navigationTypes';
 import { setAccessToken, setRefreshToken } from '../../redux/features/authentication/authenticationSlice';
-import { savedTracks } from '../../redux/services/userService'
-import axios from 'axios';
+import userService from '../../redux/services/userService'
 type homeProps = NativeStackScreenProps<RootStackParamList, "Home">
 
 const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
@@ -27,18 +26,7 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
 
 
     useEffect(() => {
-        axios({
-            method: 'get',
-            url: `${process.env.BASE_URL}/user/savedTracks`
-        })
-            .then(res => res.data)
-            .then((res: TracksResponse) => {
-                dispatch(setTracks(res.items))
-                dispatch(setFilteredTracks(res.items))
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        userService.getSavedTracks()
     }, [])
 
     const handleLogout = () => {
@@ -55,18 +43,9 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
 
     const onRefresh = () => {
         setRefreshing(true)
-        axios({
-            method: 'get',
-            url: `${process.env.BASE_URL}/user/savedTracks`
-        })
-            .then(res => res.data)
-            .then((res: TracksResponse) => {
-                dispatch(setTracks(res.items))
-                dispatch(setFilteredTracks(res.items))
+        userService.getSavedTracks()
+            .then(() => {
                 setRefreshing(false)
-            })
-            .catch(err => {
-                console.log(err)
             })
     }
     let removedTrackCard;

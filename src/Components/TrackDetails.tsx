@@ -1,11 +1,10 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity, Button, ToastAndroid } from "react-native";
-import { useDispatch, useSelector } from 'react-redux';
+import { StyleSheet, Text, View, Image, Button, ToastAndroid } from "react-native";
+import { useDispatch } from 'react-redux';
 import { globalStyles } from "../styles/globalStyles";
-import { Track, TracksResponse } from "../types";
-import { setTracks, setFilteredTracks, setLastRemovedTrack } from '../redux/features/Tracks/TracksSlice';
-import axios from "axios";
+import { Track } from "../types";
+import { setLastRemovedTrack } from '../redux/features/Tracks/TracksSlice';
+import userService from "../redux/services/userService";
 
 interface TrackCardProps {
     track: Track,
@@ -17,27 +16,14 @@ const TrackDetails: React.FC<TrackCardProps> = ({ track, setModalVisible }) => {
 
     const onRemoveHandler = () => {
         console.log("onRemoveHandler called")
-
-        axios({
-            method: 'delete',
-            url: `${process.env.BASE_URL}/user/savedTracks/${track.id}`
+        userService.removeSavedTrack(track.id)
+        .then(() => {
+            return userService.getSavedTracks()
         })
         .then(() => {
-            return axios({
-                method: 'get',
-                url: `${process.env.BASE_URL}/user/savedTracks`
-            })
-        })
-        .then(res => res.data)
-        .then((res: TracksResponse) => {
-            ToastAndroid.show('Track removed', ToastAndroid.SHORT);
             dispatch(setLastRemovedTrack(track));
-            dispatch(setTracks(res.items))
-            dispatch(setFilteredTracks(res.items))
             setModalVisible(false)
-        })
-        .catch(err => {
-            console.log(err)
+            ToastAndroid.show('Track removed', ToastAndroid.SHORT);
         })
     }
     return (

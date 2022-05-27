@@ -8,25 +8,25 @@ export interface TrackWrapper {
 }
 
 export interface Track {
-    id: String,
+    id: string,
     album: Album,
     artists: Artist[],
     duration: Number,
-    name: String
+    name: string
 }
 
 export interface Album {
-    id: String,
+    id: string,
     artists: Artist[],
     images: Image[],
-    name: String,
-    release_date: String,
+    name: string,
+    release_date: string,
     total_tracks: Number,
 }
 
 export interface Artist {
-    id: String,
-    name: String
+    id: string,
+    name: string
 }
 
 export interface Image {
