@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootStackParamList } from './navigationTypes';
 
 import LoginScreen from "../screens/Login/loginScreen";
-import { HomeStack } from './HomeStack';
+import { HomeStack } from './HomeTab';
 import { SplashScreen } from '../screens/Splash/splashScreen';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

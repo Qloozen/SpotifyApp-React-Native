@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react';
-import { View, Button, Text, FlatList, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import authHandler from '../../utils/AuthenticationHandler';
-import { RootState } from '../../redux/store/store';
-import { useDispatch, useSelector } from 'react-redux';
-import * as types from '../../types';
+import { useDispatch,  } from 'react-redux';
 
 import { useAppSelector, useAppDispatch } from '../../redux/hooks/hooks';
 import { setAccessToken, setRefreshToken } from '../../redux/features/authentication/authenticationSlice';
 import { RootStackParamList } from '../../Navigation/navigationTypes';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
 
 import { globalStyles } from '../../styles/globalStyles';
 

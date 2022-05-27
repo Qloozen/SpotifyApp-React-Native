@@ -14,6 +14,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../Navigation/navigationTypes';
 import { setAccessToken, setRefreshToken } from '../../redux/features/authentication/authenticationSlice';
 import userService from '../../redux/services/userService'
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 type homeProps = NativeStackScreenProps<RootStackParamList, "Home">
 
 const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
@@ -23,6 +26,7 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
     const [term, setTerm] = useState("");
     const [refreshing, setRefreshing] = useState(false);
     const dispatch = useDispatch();
+    const logoutIcon = <Icon name="logout" size={30} color="white" onPress={() => {handleLogout()}}/>;
 
 
     useEffect(() => {
@@ -63,7 +67,7 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
             <View style={styles.header}>
                 <Text style={globalStyles.headerText}>Saved Tracks</Text>
                 <View>
-                    <Button title="Logout" onPress={handleLogout} />
+                    {logoutIcon}
                 </View>
             </View>
             <View style={styles.inputContainer}>
