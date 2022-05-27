@@ -1,10 +1,10 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from "react-native";
-import { useDispatch, useSelector } from 'react-redux';
+import { StyleSheet, Text, View, Image, Button, ToastAndroid } from "react-native";
+import { useDispatch } from 'react-redux';
 import { globalStyles } from "../styles/globalStyles";
-import { Track, TracksResponse } from "../types";
-import { setTracks, setFilteredTracks, setLastRemovedTrack } from '../redux/features/Tracks/TracksSlice';
+import { Track } from "../types";
+import { setLastRemovedTrack } from '../redux/features/Tracks/TracksSlice';
+import userService from "../redux/services/userService";
 
 interface TrackCardProps {
     track: Track,
@@ -16,32 +16,14 @@ const TrackDetails: React.FC<TrackCardProps> = ({ track, setModalVisible }) => {
 
     const onRemoveHandler = () => {
         console.log("onRemoveHandler called")
-        AsyncStorage.getItem('persist:authentication').then((value) => {
-            let token: string = JSON.parse(value || "{}").accessToken
-            token = token.replace('"', '')
-            console.log(token)
-            fetch(`${process.env.BASE_URL}/user/savedTracks/${track.id}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-            })
-                .then(response => {
-                    return fetch(`${process.env.BASE_URL}/user/savedTracks`, {
-                        method: "GET",
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                    })
-                })
-                .then(response => response.json())
-                .then((res: TracksResponse) => {
-                    dispatch(setLastRemovedTrack(track));
-                    dispatch(setTracks(res.items))
-                    dispatch(setFilteredTracks(res.items))
-                    setModalVisible(false)
-                })
-
+        userService.removeSavedTrack(track.id)
+        .then(() => {
+            return userService.getSavedTracks()
+        })
+        .then(() => {
+            dispatch(setLastRemovedTrack(track));
+            setModalVisible(false)
+            ToastAndroid.show('Track removed', ToastAndroid.SHORT);
         })
     }
     return (

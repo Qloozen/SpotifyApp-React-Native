@@ -1,43 +1,32 @@
 import React from 'react';
 import { useState } from 'react';
 import { View, Button, Text, FlatList, TextInput, RefreshControl, StyleSheet } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { Track, TrackWrapper, TracksResponse } from '../../types'
+import { useDispatch } from 'react-redux';
+import { TrackWrapper } from '../../types'
 import { globalStyles } from '../../styles/globalStyles';
+import { setFilteredTracks } from '../../redux/features/Tracks/TracksSlice';
 
-import { useAppSelector, useAppDispatch } from '../../redux/hooks/hooks';
-import { setTracks, setFilteredTracks } from '../../redux/features/Tracks/TracksSlice';
+
+import { useAppSelector } from '../../redux/hooks/hooks';
 import { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import TrackCard from '../../Components/TrackCard';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../Navigation/navigationTypes';
 import { setAccessToken, setRefreshToken } from '../../redux/features/authentication/authenticationSlice';
+import userService from '../../redux/services/userService'
 type homeProps = NativeStackScreenProps<RootStackParamList, "Home">
 
 const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
     const tracks = useAppSelector((state) => state.root.tracks.tracks)
     const filteredTracks = useAppSelector((state) => state.root.tracks.filteredTracks)
     const lastRemovedTrack = useAppSelector((state) => state.root.tracks.lastRemovedTrack)
-    const token = useAppSelector((state) => state.root.authentication.accessToken)
     const [term, setTerm] = useState("");
     const [refreshing, setRefreshing] = useState(false);
     const dispatch = useDispatch();
 
+
     useEffect(() => {
-        console.log("useEffect Called")
-        console.log(`${process.env.BASE_URL}/user/savedTracks`)
-        fetch(`${process.env.BASE_URL}/user/savedTracks`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-        })
-            .then(response => response.json())
-            .then((res: TracksResponse) => {
-                dispatch(setTracks(res.items))
-                dispatch(setFilteredTracks(res.items))
-            })
+        userService.getSavedTracks()
     }, [])
 
     const handleLogout = () => {
@@ -47,7 +36,6 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
     }
 
     const filterHandler = (e: string) => {
-        //console.log(filteredTracks.length)
         setTerm(e)
         const list: TrackWrapper[] = tracks.filter(wrapper => wrapper.track.name.toLowerCase().includes(e.toLowerCase()) || wrapper.track.artists[0].name.toLowerCase().includes(e.toLowerCase()))
         dispatch(setFilteredTracks(list))
@@ -55,19 +43,9 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
 
     const onRefresh = () => {
         setRefreshing(true)
-
-        fetch(`${process.env.BASE_URL}/user/savedTracks`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-        })
-            .then(response => response.json())
-            .then((res: TracksResponse) => {
-                dispatch(setTracks(res.items))
-                dispatch(setFilteredTracks(res.items))
+        userService.getSavedTracks()
+            .then(() => {
                 setRefreshing(false)
-
             })
     }
     let removedTrackCard;
