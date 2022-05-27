@@ -17,7 +17,7 @@ class AuthenticationHandler {
             usePKCE: false,
             serviceConfiguration: {
                 authorizationEndpoint: 'https://accounts.spotify.com/authorize',
-                tokenEndpoint: process.env.TOKEN_ENDPOINT || "",
+                tokenEndpoint: process.env.BASE_URL + "/user/authentication" || "",
             },
         };
     }

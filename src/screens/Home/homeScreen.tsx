@@ -24,15 +24,17 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
 
     useEffect(() => {
         console.log("useEffect Called")
-        fetch("https://api.spotify.com/v1/me/tracks", {
+        console.log(`${process.env.BASE_URL}/user/savedTracks`)
+        fetch(`${process.env.BASE_URL}/user/savedTracks`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
-            }
+            },
         })
             .then(response => response.json())
             .then((res: TracksResponse) => {
                 dispatch(setTracks(res.items))
+                setFilteredList(res.items)
             })
     }, [])
 
@@ -49,7 +51,7 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
     }
 
     return (
-        <View>
+        <View style={globalStyles.container}>
             <Button title="Logout" onPress={handleLogout} />
             <TextInput
                 style={globalStyles.input}

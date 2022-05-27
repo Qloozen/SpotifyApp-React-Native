@@ -14,7 +14,18 @@ type route = homeStackProps['route'];
 export const HomeStack = () => {
 
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            screenOptions={{
+                headerShown: false,
+                tabBarStyle: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    position: 'absolute',
+                    borderTopWidth: 0,
+                    elevation: 0,
+                    height: 70
+                }
+            }}
+        >
             <Tab.Screen name="Home" component={HomeScreen} options={{
                 tabBarIcon: () => {
                     return <Text style={{ borderWidth: 2 }}>Home</Text>
