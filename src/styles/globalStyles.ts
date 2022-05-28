@@ -11,7 +11,7 @@ export const globalStyles = StyleSheet.create({
         fontSize: 28,
         fontWeight: "bold",
         color: "white",
-        textAlign: "center"
+        textAlign: "center",
     },
     textBlack: {
         color: "black"
@@ -24,7 +24,8 @@ export const globalStyles = StyleSheet.create({
         alignSelf: "center",
         borderWidth: 2,
         padding: 8,
-        borderColor: "#969696",
-        borderRadius: 10
+        borderRadius: 8,
+        color: "black",
+        backgroundColor: "white"
     }
 })

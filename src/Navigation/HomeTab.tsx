@@ -24,7 +24,7 @@ export const HomeStack = () => {
                     borderTopWidth: 0
                 },
                 tabBarHideOnKeyboard: true,
-                tabBarActiveTintColor: "white",
+                tabBarActiveTintColor: "#1DB954",
                 tabBarInactiveTintColor: "#636262"
 
             }}

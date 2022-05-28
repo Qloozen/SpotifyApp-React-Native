@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, Button, FlatList} from "react-native";
+import { Text, View, TextInput, Button, FlatList, StyleSheet} from "react-native";
+import SearchInput from "../../Components/SearchInput";
 import TrackCard from "../../Components/TrackCard";
 import { useAppSelector } from "../../redux/hooks/hooks";
 import userService from "../../redux/services/userService";
@@ -14,9 +15,11 @@ const SearchScreen = () => {
     }
     return (
         <View style={globalStyles.container}>
-            <Text style={globalStyles.textWhite}>This is the search page</Text>
-            <TextInput value={term} onChangeText={(e) => {setTerm(e)}} style={globalStyles.input}/>
-            <Button title="search" onPress={handleSearch}/>
+            <Text style={globalStyles.headerText}>Search new tracks</Text>
+            <SearchInput value={term} onChangeText={setTerm} placeholder="Artists or tracks"/>
+            <View style={styles.button}>
+                <Button title="Search" onPress={handleSearch} color="#1DB954"/>
+            </View>
 
             <FlatList
                 data={tracks}
@@ -27,5 +30,13 @@ const SearchScreen = () => {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    button: {
+        width: "30%",
+        alignSelf: "center",
+        marginVertical: 30
+    }
+})
 
 export default SearchScreen

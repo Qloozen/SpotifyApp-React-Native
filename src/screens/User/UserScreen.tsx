@@ -37,7 +37,7 @@ const UserScreen: React.FC<userProps> = ({ navigation }) => {
             {picture}
             <Text style={styles.name}>{user?.display_name}</Text>
             <View style={styles.button}>
-                <Button title='Logout' onPress={handleLogout} />
+                <Button title='Logout' onPress={handleLogout} color="#1DB954"/>
             </View>
         </View>
     )
