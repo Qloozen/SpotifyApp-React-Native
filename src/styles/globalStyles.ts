@@ -7,9 +7,11 @@ export const globalStyles = StyleSheet.create({
         backgroundColor: "#121212"
     },
     headerText: {
+        marginVertical: 30,
         fontSize: 28,
         fontWeight: "bold",
         color: "white",
+        textAlign: "center"
     },
     textBlack: {
         color: "black"

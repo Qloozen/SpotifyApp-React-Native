@@ -2,17 +2,17 @@ import React from 'react';
 //import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { RootStackParamList } from './navigationTypes';
+import { RootStackParamList } from './NavigationTypes';
 import { Text } from 'react-native';
 
 import HomeScreen from "../screens/Home/homeScreen";
 import SearchScreen from '../screens/Search/searchScreen';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import UserScreen from "../screens/User/UserScreen";
+
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
-type homeStackProps = NativeStackScreenProps<RootStackParamList, "HomeStack">
-type route = homeStackProps['route'];
+
 export const HomeStack = () => {
 
     return (
@@ -38,6 +38,12 @@ export const HomeStack = () => {
             <Tab.Screen name="Search" component={SearchScreen} options={{
                 tabBarIcon: ({color, size}) => (
                     <Icon name="search" color={color} size={size}/>
+                )
+            }} />
+
+            <Tab.Screen name="User" component={UserScreen} options={{
+                tabBarIcon: ({color, size}) => (
+                    <Icon name="person" color={color} size={size}/>
                 )
             }} />
         </Tab.Navigator>

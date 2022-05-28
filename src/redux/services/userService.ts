@@ -2,7 +2,8 @@ import axios from "axios"
 import { useDispatch } from 'react-redux';
 import { setSavedTracks, setFilteredTracks, setTracks } from '../../redux/features/Tracks/TracksSlice';
 
-import { SavedTracksResponse, SearchTrackResponse } from "../../types";
+import { SavedTracksResponse, SearchTrackResponse, User } from "../../types";
+import { setUser } from "../features/authentication/authenticationSlice";
 
 const dispatch = useDispatch();
 
@@ -59,8 +60,24 @@ class UserService {
                 console.log(err)
             })
     }
+
+    public async getMe() {
+        console.debug("userService: getMe called")
+        await axios({
+            method: 'get',
+            url: `${process.env.BASE_URL}/user/profile`
+        })
+            .then(res => res.data)
+            .then((res: User) => {
+                dispatch(setUser(res))
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    } 
 }
 const userService = new UserService()
 export default userService
+export const getService = () => { return userService}
 
 

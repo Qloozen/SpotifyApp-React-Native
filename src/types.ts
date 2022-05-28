@@ -39,3 +39,10 @@ export interface Image {
     url: string,
     width: Number
 }
+
+export interface User {
+    display_name: string,
+    images: [{
+        url: string
+    }]
+}

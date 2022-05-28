@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, Text } from 'react-native';
 
 import { useAppSelector } from '../../redux/hooks/hooks';
-import { RootStackParamList } from '../../Navigation/navigationTypes';
+import { RootStackParamList } from '../../Navigation/NavigationTypes';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

@@ -1,38 +1,52 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import authHandler from '../../utils/AuthenticationHandler';
-import { useDispatch,  } from 'react-redux';
-
-import { useAppSelector, useAppDispatch } from '../../redux/hooks/hooks';
-import { setAccessToken, setRefreshToken } from '../../redux/features/authentication/authenticationSlice';
-import { RootStackParamList } from '../../Navigation/navigationTypes';
+import { RootStackParamList } from '../../Navigation/NavigationTypes';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-
+//UI
+import { View, Text, StyleSheet } from 'react-native';
 import { globalStyles } from '../../styles/globalStyles';
-
 import LoginButton from "../../Components/LoginButton"
+
+//Data
+import { setAccessToken, setAccessTokenExpirationDate, setRefreshToken } from '../../redux/features/authentication/authenticationSlice';
+import { useDispatch } from 'react-redux'; 
+import authHandler from '../../utils/AuthenticationHandler';
+import {getService} from '../../redux/services/userService';
 
 type loginProps = NativeStackScreenProps<RootStackParamList, "Login">
 
 const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
-    const token = useAppSelector((state) => state.root.authentication.accessToken)
     const dispatch = useDispatch();
-
-    const onPressLogin = async () => {
-        const authenticationObject = await authHandler.onLogin();
-        dispatch(setAccessToken(authenticationObject?.accessToken))
-        dispatch(setRefreshToken(authenticationObject?.refreshToken))
-        if (authenticationObject?.accessToken != undefined) {
-            navigation.replace("HomeStack")
-        }
+    const service = getService();
+    const handleLogin = () => {
+        console.debug("LoginScreen: onPressLogin called")
+        authHandler.onLogin()
+            .then(res => {
+                // Format = UTC + 1 yyyy-MM-ddThh:mm:sssZ
+                const date = new Date(res!.accessTokenExpirationDate)
+                date.setHours(date.getHours() - 1)
+                dispatch(setAccessToken(res?.accessToken))
+                dispatch(setRefreshToken(res?.refreshToken))
+                dispatch(setAccessTokenExpirationDate(date))
+                
+                if (!(res?.accessToken && res?.refreshToken && res?.accessTokenExpirationDate)) throw new Error("Login failed");
+                
+                return service.getMe()
+            })
+            .then(() => {
+                console.log("User logged in");
+                navigation.replace("HomeStack");
+            })
+            .catch(err => {
+                console.warn(err)
+            })    
     }
 
     return (
         <View style={globalStyles.container}>
             <Text style={[globalStyles.textWhite, styles.title]}>MySpotify</Text>
             <View style={styles.button}>
-                <LoginButton title='Login to spotify' onPress={() => onPressLogin()} />
+                <LoginButton title='Login to spotify' onPress={() => handleLogin()} />
             </View>
         </View>
     )
