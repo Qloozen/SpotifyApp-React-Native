@@ -1,8 +1,8 @@
 import axios from "axios"
 import { useDispatch } from 'react-redux';
-import { setTracks, setFilteredTracks } from '../../redux/features/Tracks/TracksSlice';
+import { setSavedTracks, setFilteredTracks, setTracks } from '../../redux/features/Tracks/TracksSlice';
 
-import { TracksResponse } from "../../types";
+import { SavedTracksResponse, SearchTrackResponse } from "../../types";
 
 const dispatch = useDispatch();
 
@@ -14,8 +14,8 @@ class UserService {
             url: `${process.env.BASE_URL}/user/savedTracks`
         })
             .then(res => res.data)
-            .then((res: TracksResponse) => {
-                dispatch(setTracks(res.items))
+            .then((res: SavedTracksResponse) => {
+                dispatch(setSavedTracks(res.items))
                 dispatch(setFilteredTracks(res.items))
             })
             .catch(err => {
@@ -43,6 +43,21 @@ class UserService {
         .catch(err => {
             console.log(err)
         })
+    }
+
+    public async searchTrack(term: string) {
+        console.debug("userService: searchTrack called.")
+        await axios({
+            method: 'get',
+            url: `${process.env.BASE_URL}/track?term=${term}`
+        })
+            .then(res => res.data)
+            .then((res: SearchTrackResponse) => {
+                dispatch(setTracks(res.tracks.items))
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 }
 const userService = new UserService()

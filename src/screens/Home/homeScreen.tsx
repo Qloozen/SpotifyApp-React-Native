@@ -20,7 +20,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 type homeProps = NativeStackScreenProps<RootStackParamList, "Home">
 
 const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
-    const tracks = useAppSelector((state) => state.root.tracks.tracks)
+    const savedTracks = useAppSelector((state) => state.root.tracks.savedTracks)
     const filteredTracks = useAppSelector((state) => state.root.tracks.filteredTracks)
     const lastRemovedTrack = useAppSelector((state) => state.root.tracks.lastRemovedTrack)
     const [term, setTerm] = useState("");
@@ -41,7 +41,7 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
 
     const filterHandler = (e: string) => {
         setTerm(e)
-        const list: TrackWrapper[] = tracks.filter(wrapper => wrapper.track.name.toLowerCase().includes(e.toLowerCase()) || wrapper.track.artists[0].name.toLowerCase().includes(e.toLowerCase()))
+        const list: TrackWrapper[] = savedTracks.filter(wrapper => wrapper.track.name.toLowerCase().includes(e.toLowerCase()) || wrapper.track.artists[0].name.toLowerCase().includes(e.toLowerCase()))
         dispatch(setFilteredTracks(list))
     }
 

@@ -1,5 +1,10 @@
-export interface TracksResponse {
+export interface SavedTracksResponse {
     items: TrackWrapper[]
+}
+export interface SearchTrackResponse {
+    tracks: {
+        items: Track[]
+    }
 }
 
 export interface TrackWrapper {
