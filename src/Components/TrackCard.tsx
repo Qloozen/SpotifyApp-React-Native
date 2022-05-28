@@ -81,6 +81,7 @@ const TrackCard: React.FC<TrackCardProps> = ({ track, buttonText }) => {
                         <Button
                             title="Close"
                             onPress={() => setModalVisible(!modalVisible)}
+                            color="#1DB954"
                         />
                     </View>
                 </View>
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
         height: 50,
     },
     content: {
+        width: "70%",
         marginLeft: 10
     },
     centeredView: {

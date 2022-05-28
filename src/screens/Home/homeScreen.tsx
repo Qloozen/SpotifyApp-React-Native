@@ -14,6 +14,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../Navigation/NavigationTypes';
 import { setAccessToken, setRefreshToken } from '../../redux/features/authentication/authenticationSlice';
 import userService from '../../redux/services/userService'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import SearchInput from '../../Components/SearchInput';
 
 type homeProps = NativeStackScreenProps<RootStackParamList, "Home">
 
@@ -59,16 +61,9 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
             
             <Text style={globalStyles.headerText}>Saved Tracks</Text>
 
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={globalStyles.input}
-                    onChangeText={(e) => { filterHandler(e) }}
-                    value={term}
-                    placeholder="Search track..."
-                />
-            </View>
+            <SearchInput value={term} onChangeText={filterHandler} placeholder="Search in saved tracks"/>
 
-            <View style={{ flex: 4 }}>
+            <View style={globalStyles.container}>
                 <FlatList
                     data={filteredTracks}
                     renderItem={({ item }) => (
@@ -96,9 +91,7 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-    inputContainer: {
-        height: "12%"
-    }
+
 })
 
 export default HomeScreen

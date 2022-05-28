@@ -38,7 +38,7 @@ const TrackDetails: React.FC<TrackCardProps> = ({ track, setModalVisible }) => {
             <Text style={[globalStyles.textWhite, { textAlign: "center" }]}>{track.artists[0].name}</Text>
 
             <View style={styles.actions}>
-                <Button title="remove" onPress={onRemoveHandler} />
+                <Button title="remove" onPress={onRemoveHandler} color="#ad2c23"/>
             </View>
         </View>
     )
