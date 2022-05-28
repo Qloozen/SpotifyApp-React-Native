@@ -3,24 +3,27 @@ import { TrackWrapper, Track } from '../../../types'
 
 // Slice state type
 interface TrackState {
-    tracks: TrackWrapper[],
+    savedTracks: TrackWrapper[],
     filteredTracks: TrackWrapper[],
-    lastRemovedTrack: Track | null
+    lastRemovedTrack: Track | null,
+    tracks: Track[],
+
 }
 
 // Initial state
 const initialState: TrackState = {
-    tracks: [],
+    savedTracks: [],
     filteredTracks: [],
-    lastRemovedTrack: null
+    lastRemovedTrack: null,
+    tracks: [],
 }
 
 const trackSlice = createSlice({
     name: 'tracks',
     initialState,
     reducers: {
-        setTracks(state, action: PayloadAction<TrackWrapper[]>) {
-            state.tracks = action.payload
+        setSavedTracks(state, action: PayloadAction<TrackWrapper[]>) {
+            state.savedTracks = action.payload
         },
         setFilteredTracks(state, action: PayloadAction<TrackWrapper[]>) {
             state.filteredTracks = action.payload
@@ -28,13 +31,17 @@ const trackSlice = createSlice({
         setLastRemovedTrack(state, action: PayloadAction<Track | null>) {
             state.lastRemovedTrack = action.payload
         },
+        setTracks(state, action: PayloadAction<Track[]>) {
+            state.tracks = action.payload
+        },
     },
 });
 
 export const {
-    setTracks,
+    setSavedTracks,
     setFilteredTracks,
-    setLastRemovedTrack
+    setLastRemovedTrack,
+    setTracks
 } = trackSlice.actions;
 
 export default trackSlice.reducer;

@@ -1,8 +1,9 @@
 import axios from "axios"
 import { useDispatch } from 'react-redux';
-import { setTracks, setFilteredTracks } from '../../redux/features/Tracks/TracksSlice';
+import { setSavedTracks, setFilteredTracks, setTracks } from '../../redux/features/Tracks/TracksSlice';
 
-import { TracksResponse } from "../../types";
+import { SavedTracksResponse, SearchTrackResponse, User } from "../../types";
+import { setUser } from "../features/authentication/authenticationSlice";
 
 const dispatch = useDispatch();
 
@@ -14,8 +15,8 @@ class UserService {
             url: `${process.env.BASE_URL}/user/savedTracks`
         })
             .then(res => res.data)
-            .then((res: TracksResponse) => {
-                dispatch(setTracks(res.items))
+            .then((res: SavedTracksResponse) => {
+                dispatch(setSavedTracks(res.items))
                 dispatch(setFilteredTracks(res.items))
             })
             .catch(err => {
@@ -44,8 +45,39 @@ class UserService {
             console.log(err)
         })
     }
+
+    public async searchTrack(term: string) {
+        console.debug("userService: searchTrack called.")
+        await axios({
+            method: 'get',
+            url: `${process.env.BASE_URL}/track?term=${term}`
+        })
+            .then(res => res.data)
+            .then((res: SearchTrackResponse) => {
+                dispatch(setTracks(res.tracks.items))
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    public async getMe() {
+        console.debug("userService: getMe called")
+        await axios({
+            method: 'get',
+            url: `${process.env.BASE_URL}/user/profile`
+        })
+            .then(res => res.data)
+            .then((res: User) => {
+                dispatch(setUser(res))
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    } 
 }
 const userService = new UserService()
 export default userService
+export const getService = () => { return userService}
 
 

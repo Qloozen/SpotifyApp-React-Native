@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { View, Button, Text, FlatList, TextInput, RefreshControl, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TextInput, RefreshControl, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { TrackWrapper } from '../../types'
 import { globalStyles } from '../../styles/globalStyles';
@@ -11,13 +11,14 @@ import { useAppSelector } from '../../redux/hooks/hooks';
 import { useEffect } from 'react';
 import TrackCard from '../../Components/TrackCard';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../Navigation/navigationTypes';
+import { RootStackParamList } from '../../Navigation/NavigationTypes';
 import { setAccessToken, setRefreshToken } from '../../redux/features/authentication/authenticationSlice';
 import userService from '../../redux/services/userService'
+
 type homeProps = NativeStackScreenProps<RootStackParamList, "Home">
 
 const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
-    const tracks = useAppSelector((state) => state.root.tracks.tracks)
+    const savedTracks = useAppSelector((state) => state.root.tracks.savedTracks)
     const filteredTracks = useAppSelector((state) => state.root.tracks.filteredTracks)
     const lastRemovedTrack = useAppSelector((state) => state.root.tracks.lastRemovedTrack)
     const [term, setTerm] = useState("");
@@ -29,15 +30,9 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
         userService.getSavedTracks()
     }, [])
 
-    const handleLogout = () => {
-        dispatch(setAccessToken(undefined))
-        dispatch(setRefreshToken(undefined))
-        navigation.replace("Login")
-    }
-
     const filterHandler = (e: string) => {
         setTerm(e)
-        const list: TrackWrapper[] = tracks.filter(wrapper => wrapper.track.name.toLowerCase().includes(e.toLowerCase()) || wrapper.track.artists[0].name.toLowerCase().includes(e.toLowerCase()))
+        const list: TrackWrapper[] = savedTracks.filter(wrapper => wrapper.track.name.toLowerCase().includes(e.toLowerCase()) || wrapper.track.artists[0].name.toLowerCase().includes(e.toLowerCase()))
         dispatch(setFilteredTracks(list))
     }
 
@@ -48,8 +43,9 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
                 setRefreshing(false)
             })
     }
-    let removedTrackCard;
+
     // Last Removed track
+    let removedTrackCard;
     if (lastRemovedTrack) {
         removedTrackCard =
             <View style={{ flex: 1, marginBottom: 10, height: "20%", backgroundColor: "#212121" }}>
@@ -60,12 +56,9 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
 
     return (
         <View style={globalStyles.container}>
-            <View style={styles.header}>
-                <Text style={globalStyles.headerText}>Saved Tracks</Text>
-                <View>
-                    <Button title="Logout" onPress={handleLogout} />
-                </View>
-            </View>
+            
+            <Text style={globalStyles.headerText}>Saved Tracks</Text>
+
             <View style={styles.inputContainer}>
                 <TextInput
                     style={globalStyles.input}
@@ -103,12 +96,6 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-    header: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        padding: 20,
-        height: "15%"
-    },
     inputContainer: {
         height: "12%"
     }

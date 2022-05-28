@@ -1,5 +1,10 @@
-export interface TracksResponse {
+export interface SavedTracksResponse {
     items: TrackWrapper[]
+}
+export interface SearchTrackResponse {
+    tracks: {
+        items: Track[]
+    }
 }
 
 export interface TrackWrapper {
@@ -33,4 +38,11 @@ export interface Image {
     height: Number,
     url: string,
     width: Number
+}
+
+export interface User {
+    display_name: string,
+    images: [{
+        url: string
+    }]
 }

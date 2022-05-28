@@ -25,7 +25,6 @@ class AuthenticationHandler {
     async onLogin() {
         try {
             const result = await authorize(this.spotifyAuthConfig);
-            console.log("Logged In");
             return result;
         } catch (error) {
             console.error(JSON.stringify(error));
