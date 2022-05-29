@@ -2,7 +2,6 @@ import React from 'react';
 import { useState } from 'react';
 import { View, Text, FlatList, TextInput, RefreshControl, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { TrackWrapper } from '../../types'
 import { globalStyles } from '../../styles/globalStyles';
 import { setFilteredTracks } from '../../redux/features/Tracks/TracksSlice';
 
@@ -12,9 +11,7 @@ import { useEffect } from 'react';
 import TrackCard from '../../Components/TrackCard';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../Navigation/NavigationTypes';
-import { setAccessToken, setRefreshToken } from '../../redux/features/authentication/authenticationSlice';
 import SpotifyService from '../../redux/services/SpotifyService'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import SearchInput from '../../Components/SearchInput';
 
 type homeProps = NativeStackScreenProps<RootStackParamList, "Home">

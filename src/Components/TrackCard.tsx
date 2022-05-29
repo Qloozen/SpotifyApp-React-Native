@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button, Modal, ToastAndroid } from "react-native";
 import { globalStyles } from "../styles/globalStyles";
-import { Track } from "../types";
 import TrackDetails from "./TrackDetails";
 import { useDispatch } from 'react-redux';
 import { setLastRemovedTrack, } from "../redux/features/Tracks/TracksSlice";

@@ -2,8 +2,6 @@ import axios from "axios"
 import { useDispatch } from 'react-redux';
 import { store } from '../store/store';
 import { setSavedTracks, setFilteredTracks, setTracks } from '../features/Tracks/TracksSlice';
-
-import { SavedTracksResponse, SearchTrackResponse, User } from "../../types";
 import { setUser } from "../features/authentication/authenticationSlice";
 
 import SpotifyWebAPI from 'spotify-web-api-js';
@@ -27,7 +25,7 @@ class SpotifyService {
         console.debug("SpotifyService: getSavedTracks called.")
         this.setToken();
 
-        this.sp.getMySavedTracks()
+        await this.sp.getMySavedTracks()
             .then(res => {
                 dispatch(setSavedTracks(res.items))
                 dispatch(setFilteredTracks(res.items))
@@ -41,7 +39,7 @@ class SpotifyService {
         console.debug("SpotifyService: addSavedTrack called.")
 
         this.setToken();
-        this.sp.addToMySavedTracks([trackId])
+        await this.sp.addToMySavedTracks([trackId])
             .catch(err => {
                 console.error(err)
             })
@@ -51,7 +49,7 @@ class SpotifyService {
         console.debug("SpotifyService: removeSavedTrack called.")
 
         this.setToken();
-        this.sp.removeFromMySavedTracks([trackId])
+        await this.sp.removeFromMySavedTracks([trackId])
             .catch(err => {
                 console.error(err)
             })
@@ -61,7 +59,7 @@ class SpotifyService {
         console.debug("SpotifyService: searchTrack called.")
 
         this.setToken();
-        this.sp.searchTracks(term)
+        await this.sp.searchTracks(term)
             .then(res => {
                 dispatch(setTracks(res.tracks.items))
             })
@@ -73,7 +71,7 @@ class SpotifyService {
     public async getMe() {
         console.debug("SpotifyService: getMe called")
         this.setToken();
-        this.sp.getMe()
+        await this.sp.getMe()
             .then(res => {
                 dispatch(setUser(res))
             })

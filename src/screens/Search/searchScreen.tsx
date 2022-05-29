@@ -18,7 +18,7 @@ const SearchScreen = () => {
             <Text style={globalStyles.headerText}>Search new tracks</Text>
             <SearchInput value={term} onChangeText={setTerm} placeholder="Artists or tracks"/>
             <View style={styles.button}>
-                <Button title="Search" onPress={handleSearch} color="#1DB954"/>
+                <Button title="Search" onPress={handleSearch} color="#1DB954" disabled={term.length < 1}/>
             </View>
 
             <FlatList

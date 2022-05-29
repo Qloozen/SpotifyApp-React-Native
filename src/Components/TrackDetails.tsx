@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Text, View, Image, Button, ToastAndroid } from "react-native";
 import { useDispatch } from 'react-redux';
 import { globalStyles } from "../styles/globalStyles";
-import { Track } from "../types";
 import { setLastRemovedTrack } from '../redux/features/Tracks/TracksSlice';
 import {getService} from "../redux/services/SpotifyService";
 
