@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
-import { View, Text, FlatList, TextInput, RefreshControl, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TextInput, RefreshControl, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { globalStyles } from '../../styles/globalStyles';
-import { setFilteredTracks } from '../../redux/features/Tracks/TracksSlice';
+import { setCurrentTrack, setFilteredTracks, setIsPlayingFalse, setIsPlayingTrue } from '../../redux/features/Tracks/TracksSlice';
 
 
 import { useAppSelector } from '../../redux/hooks/hooks';
@@ -13,6 +13,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../Navigation/NavigationTypes';
 import SpotifyService from '../../redux/services/SpotifyService'
 import SearchInput from '../../Components/SearchInput';
+import Player from '../../Components/Player';
 
 type homeProps = NativeStackScreenProps<RootStackParamList, "Home">
 
@@ -42,13 +43,38 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
                 setRefreshing(false)
             })
     }
+    const handlePlay = (track: SpotifyApi.TrackObjectFull) =>{
+        service.play(track).then(() => {
+            dispatch(setCurrentTrack(track))
+            dispatch(setIsPlayingTrue())
+        }).catch(err => {
+            if (err.message == "No playback device") {
+                Alert.alert(
+                    "Playback",
+                    "There is no playback device active",
+                    [
+                      {
+                        text: "Cancel",
+                        style: "cancel"
+                      },
+                      { text: "OK"}
+                    ]
+                  );
+            }
+        })
+    }
+    const handlePause = () => {
+        service.Pause().then(() => {
+            dispatch(setIsPlayingFalse())
+        })
+    }
 
     // Last Removed track
     let removedTrackCard;
     if (lastRemovedTrack) {
         removedTrackCard =
             <View style={{ flex: 1, marginBottom: 10, height: "20%", backgroundColor: "#212121" }}>
-                <TrackCard track={lastRemovedTrack!} buttonText="restore" />
+                <TrackCard track={lastRemovedTrack!} buttonText="restore" onPress={handlePlay}/>
             </View>
     }
 
@@ -64,14 +90,13 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
                 <FlatList
                     data={filteredTracks}
                     renderItem={({ item }) => (
-                        <TrackCard track={item.track} buttonText="details" />
+                        <TrackCard track={item.track} buttonText="details" onPress={handlePlay}/>
                     )}
                     ListHeaderComponent={
                         removedTrackCard
                     }
                     ListFooterComponent={
                         <View style={{ marginBottom: 70 }}>
-                            <Text>This is the footer</Text>
                         </View>
                     }
                     refreshControl={
@@ -83,6 +108,8 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
                 />
             </View>
 
+            <Player onPlay={handlePlay} onPause={handlePause}/>
+                    	
         </View>
     )
 }

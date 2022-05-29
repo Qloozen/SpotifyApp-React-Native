@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RootStackParamList } from '../../Navigation/NavigationTypes';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -18,6 +18,7 @@ type userProps = NativeStackScreenProps<RootStackParamList, "User">
 const UserScreen: React.FC<userProps> = ({ navigation }) => {
     const dispatch = useDispatch();
     const user = useAppSelector((state) => state.root.authentication.user)
+
     
     let picture = <Icon name="person-circle-sharp" size={150} color="white" style={{alignSelf: 'center'}}/>;
     user?.display_name
@@ -38,6 +39,7 @@ const UserScreen: React.FC<userProps> = ({ navigation }) => {
             <Text style={globalStyles.headerText}>Profile</Text>
             {picture}
             <Text style={styles.name}>{user?.display_name}</Text>
+
             <View style={styles.button}>
                 <Button title='Logout' onPress={handleLogout} color="#1DB954"/>
             </View>
@@ -46,7 +48,10 @@ const UserScreen: React.FC<userProps> = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-
+    dropdown: {
+        width: "50%",
+        alignSelf: "center"
+    },
     image: {
         marginTop: 40,
         alignSelf: "center",

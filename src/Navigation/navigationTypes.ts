@@ -4,5 +4,6 @@ export type RootStackParamList = {
     HomeStack: undefined,
     Home: undefined,
     Search: undefined,
-    User: undefined
+    User: undefined,
+    PlayerDevice: undefined
 }

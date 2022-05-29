@@ -11,9 +11,10 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 interface TrackCardProps {
     track: SpotifyApi.TrackObjectFull
     buttonText: string
+    onPress: any
 }
 
-const TrackCard: React.FC<TrackCardProps> = ({ track, buttonText }) => {
+const TrackCard: React.FC<TrackCardProps> = ({ track, buttonText, onPress}) => {
     const menuIcon = <Icon name="dots-vertical" size={30} color="white" onPress={() => setModalVisible(true)}/>;
     const restoreIcon = <Icon name="restore" size={30} color="green" onPress={() => restoreHandler()}/>;
     const addIcon = <MaterialIcon name="add-circle" size={30} color="white" onPress={() => {addHandler()}}/>;
@@ -48,7 +49,7 @@ const TrackCard: React.FC<TrackCardProps> = ({ track, buttonText }) => {
     }
 
     return (
-        <TouchableOpacity style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={() => {onPress(track)}}>
             {isRestore && (<Text>Last removed:</Text>)}
             <View style={styles.songContainer}>
                 <Image

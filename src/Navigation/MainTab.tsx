@@ -3,17 +3,16 @@ import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from './NavigationTypes';
-import { Text } from 'react-native';
 
-import HomeScreen from "../screens/Home/homeScreen";
-import SearchScreen from '../screens/Search/searchScreen';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import UserScreen from "../screens/User/UserScreen";
+import HomeScreen from '../screens/Home/homeScreen';
+import SearchScreen from '../screens/Search/searchScreen';
 
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
-export const HomeStack = () => {
+export const MainTab = () => {
 
     return (
         <Tab.Navigator

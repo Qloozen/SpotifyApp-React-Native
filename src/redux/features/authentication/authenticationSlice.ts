@@ -6,7 +6,9 @@ interface AuthenticationState {
     accessToken: string | undefined,
     refreshToken: string | undefined,
     user: SpotifyApi.CurrentUsersProfileResponse | undefined,
-    loading: boolean
+    loading: boolean,
+    devices: SpotifyApi.UserDevice[]
+    currentDevice: SpotifyApi.UserDevice | undefined
 }
 
 // Initial state
@@ -16,6 +18,8 @@ const initialState: AuthenticationState = {
     refreshToken: undefined,
     user: undefined,
     loading: false,
+    devices: [],
+    currentDevice: undefined
 }
 
 const authenticationSlice = createSlice({
@@ -43,6 +47,12 @@ const authenticationSlice = createSlice({
         setUser(state, action: PayloadAction<SpotifyApi.CurrentUsersProfileResponse | undefined>) {
             state.user = action.payload;
         },
+        setDevices(state, action: PayloadAction<SpotifyApi.UserDevice[]>) {
+            state.devices = action.payload
+        },
+        setCurrentDevice(state, action: PayloadAction<SpotifyApi.UserDevice>) {
+            state.currentDevice = action.payload
+        },
     },
 });
 
@@ -52,7 +62,9 @@ export const {
     setLoadingTrue,
     setLoadingFalse,
     setAccessTokenExpirationDate,
-    setUser
+    setUser,
+    setDevices,
+    setCurrentDevice
 } = authenticationSlice.actions;
 
 export default authenticationSlice.reducer;

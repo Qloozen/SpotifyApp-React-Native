@@ -25,8 +25,7 @@ const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
                 // Format = UTC +0 yyyy-MM-ddThh:mm:sssZ
                 // Duration = + 1 hour
                 const date = new Date(res!.accessTokenExpirationDate)
-                date.setMinutes(date.getMinutes() - 5)
-
+                date.setMinutes(date.getMinutes() -58)
                 dispatch(setAccessToken(res?.accessToken))
                 dispatch(setRefreshToken(res?.refreshToken))
                 dispatch(setAccessTokenExpirationDate(date))
@@ -34,6 +33,9 @@ const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
                 if (!(res?.accessToken && res?.refreshToken && res?.accessTokenExpirationDate)) throw new Error("Login failed");
 
                 return service.getMe()
+            })
+            .then(() => {
+                return service.getDevices()
             })
             .then(() => {
                 console.log("User logged in");

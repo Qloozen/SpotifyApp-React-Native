@@ -1,8 +1,8 @@
 import axios from "axios"
 import { useDispatch } from 'react-redux';
 import { store } from '../store/store';
-import { setSavedTracks, setFilteredTracks, setTracks } from '../features/Tracks/TracksSlice';
-import { setAccessToken, setAccessTokenExpirationDate, setUser } from "../features/authentication/authenticationSlice";
+import { setSavedTracks, setFilteredTracks, setTracks, setCurrentPlayBack,  } from '../features/Tracks/TracksSlice';
+import { setAccessToken, setAccessTokenExpirationDate, setUser,setDevices, setCurrentDevice } from "../features/authentication/authenticationSlice";
 
 import SpotifyWebAPI from 'spotify-web-api-js';
 
@@ -32,7 +32,7 @@ class SpotifyService {
             }).then(res => {
                 console.debug("SpotifyService: token refreshed")
                 const expires = new Date()
-                expires.setMinutes(expires.getMinutes() + 55)
+                expires.setMinutes(expires.getMinutes() + 2)
                 dispatch(setAccessToken(res.data.accessToken))
                 dispatch(setAccessTokenExpirationDate(expires))
             })
@@ -102,6 +102,51 @@ class SpotifyService {
                 console.error(err)
             })
     } 
+
+    public async getDevices() {
+        console.debug("SpotifyService: getDevices called")
+
+        await this.setToken()
+        await this.sp.getMyDevices()
+            .then(res => {
+                dispatch(setDevices(res.devices))
+            })
+    }
+
+    public async play(track: SpotifyApi.TrackObjectFull) {
+        await this.setToken()
+        await this.getDevices()
+
+        const devices = store.getState().root.authentication.devices
+        const currentTrack = store.getState().root.tracks.currentTrack
+        const currentPlayBack = store.getState().root.tracks.currentPlayBack
+        let position_ms = 0;
+
+        if(devices.length < 1) {
+           throw new Error("No playback device");
+        }
+        if(currentTrack?.id == track.id) {
+            position_ms = currentPlayBack?.progress_ms ? currentPlayBack.progress_ms : 0
+        }
+        const deviceId = devices[0]?.id
+        dispatch(setCurrentDevice(devices[0]))
+        await this.sp.play({
+            device_id: deviceId!,
+            context_uri: track.album.uri,
+            offset: {
+            position: track.track_number - 1
+            },
+            position_ms: position_ms
+        })
+    }
+
+    public async Pause() {
+        await this.setToken()
+        await this.sp.getMyCurrentPlaybackState().then(res => {
+            dispatch(setCurrentPlayBack(res))
+            return this.sp.pause()
+        })
+    }
 }
 const spotifyService = new SpotifyService()
 export default new SpotifyService()

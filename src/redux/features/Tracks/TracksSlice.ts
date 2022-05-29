@@ -6,7 +6,9 @@ interface TrackState {
     filteredTracks: SpotifyApi.SavedTrackObject[],
     lastRemovedTrack: SpotifyApi.TrackObjectFull | null,
     tracks: SpotifyApi.TrackObjectFull[],
-
+    currentTrack: SpotifyApi.TrackObjectFull | null,
+    isPlaying: boolean
+    currentPlayBack: SpotifyApi.CurrentPlaybackResponse | null
 }
 
 // Initial state
@@ -15,6 +17,9 @@ const initialState: TrackState = {
     filteredTracks: [],
     lastRemovedTrack: null,
     tracks: [],
+    currentTrack: null,
+    isPlaying: false,
+    currentPlayBack: null
 }
 
 const trackSlice = createSlice({
@@ -33,6 +38,19 @@ const trackSlice = createSlice({
         setTracks(state, action: PayloadAction<SpotifyApi.TrackObjectFull[]>) {
             state.tracks = action.payload
         },
+        setCurrentTrack(state, action: PayloadAction<SpotifyApi.TrackObjectFull | null>) {
+            state.currentTrack = action.payload
+        },
+        setIsPlayingTrue(state) {
+            state.isPlaying = true
+        },
+        setIsPlayingFalse(state) {
+            state.isPlaying = false
+        },
+        setCurrentPlayBack(state, action: PayloadAction<SpotifyApi.CurrentPlaybackResponse | null>) {
+            state.currentPlayBack = action.payload
+        }
+
     },
 });
 
@@ -40,7 +58,11 @@ export const {
     setSavedTracks,
     setFilteredTracks,
     setLastRemovedTrack,
-    setTracks
+    setTracks,
+    setCurrentTrack,
+    setIsPlayingTrue,
+    setIsPlayingFalse,
+    setCurrentPlayBack
 } = trackSlice.actions;
 
 export default trackSlice.reducer;
