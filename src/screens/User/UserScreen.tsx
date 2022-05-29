@@ -20,9 +20,11 @@ const UserScreen: React.FC<userProps> = ({ navigation }) => {
     const user = useAppSelector((state) => state.root.authentication.user)
     
     let picture = <Icon name="person-circle-sharp" size={150} color="white" style={{alignSelf: 'center'}}/>;
+    user?.display_name
+    const imageUrl = user?.images ? user?.images[0].url : undefined
 
-    if(user?.images[0].url) {
-        picture = <Image source={{uri: user.images[0].url}} style={styles.image}/>
+    if(imageUrl) {
+        picture = <Image source={{uri: imageUrl}} style={styles.image}/>
     }
 
     const handleLogout = () => {

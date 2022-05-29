@@ -11,7 +11,7 @@ import LoginButton from "../../Components/LoginButton"
 import { setAccessToken, setAccessTokenExpirationDate, setRefreshToken } from '../../redux/features/authentication/authenticationSlice';
 import { useDispatch } from 'react-redux'; 
 import authHandler from '../../utils/AuthenticationHandler';
-import {getService} from '../../redux/services/userService';
+import {getService} from '../../redux/services/SpotifyService';
 
 type loginProps = NativeStackScreenProps<RootStackParamList, "Login">
 

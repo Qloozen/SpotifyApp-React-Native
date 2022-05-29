@@ -3,10 +3,10 @@ import { TrackWrapper, Track } from '../../../types'
 
 // Slice state type
 interface TrackState {
-    savedTracks: TrackWrapper[],
-    filteredTracks: TrackWrapper[],
-    lastRemovedTrack: Track | null,
-    tracks: Track[],
+    savedTracks: SpotifyApi.SavedTrackObject[],
+    filteredTracks: SpotifyApi.SavedTrackObject[],
+    lastRemovedTrack: SpotifyApi.TrackObjectFull | null,
+    tracks: SpotifyApi.TrackObjectFull[],
 
 }
 
@@ -22,16 +22,16 @@ const trackSlice = createSlice({
     name: 'tracks',
     initialState,
     reducers: {
-        setSavedTracks(state, action: PayloadAction<TrackWrapper[]>) {
+        setSavedTracks(state, action: PayloadAction<SpotifyApi.SavedTrackObject[]>) {
             state.savedTracks = action.payload
         },
-        setFilteredTracks(state, action: PayloadAction<TrackWrapper[]>) {
+        setFilteredTracks(state, action: PayloadAction<SpotifyApi.SavedTrackObject[]>) {
             state.filteredTracks = action.payload
         },
-        setLastRemovedTrack(state, action: PayloadAction<Track | null>) {
+        setLastRemovedTrack(state, action: PayloadAction<SpotifyApi.TrackObjectFull | null>) {
             state.lastRemovedTrack = action.payload
         },
-        setTracks(state, action: PayloadAction<Track[]>) {
+        setTracks(state, action: PayloadAction<SpotifyApi.TrackObjectFull[]>) {
             state.tracks = action.payload
         },
     },

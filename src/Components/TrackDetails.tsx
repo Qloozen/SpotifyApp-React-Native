@@ -4,21 +4,22 @@ import { useDispatch } from 'react-redux';
 import { globalStyles } from "../styles/globalStyles";
 import { Track } from "../types";
 import { setLastRemovedTrack } from '../redux/features/Tracks/TracksSlice';
-import userService from "../redux/services/userService";
+import {getService} from "../redux/services/SpotifyService";
 
 interface TrackCardProps {
-    track: Track,
+    track: SpotifyApi.TrackObjectFull,
     setModalVisible: any
 }
 
 const TrackDetails: React.FC<TrackCardProps> = ({ track, setModalVisible }) => {
     const dispatch = useDispatch();
+    const service = getService();
 
     const onRemoveHandler = () => {
         console.log("onRemoveHandler called")
-        userService.removeSavedTrack(track.id)
+        service.removeSavedTrack(track.id)
         .then(() => {
-            return userService.getSavedTracks()
+            return service.getSavedTracks()
         })
         .then(() => {
             dispatch(setLastRemovedTrack(track));

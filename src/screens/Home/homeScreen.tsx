@@ -13,7 +13,7 @@ import TrackCard from '../../Components/TrackCard';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../Navigation/NavigationTypes';
 import { setAccessToken, setRefreshToken } from '../../redux/features/authentication/authenticationSlice';
-import userService from '../../redux/services/userService'
+import SpotifyService from '../../redux/services/SpotifyService'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SearchInput from '../../Components/SearchInput';
 
@@ -26,21 +26,21 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
     const [term, setTerm] = useState("");
     const [refreshing, setRefreshing] = useState(false);
     const dispatch = useDispatch();
-
+    const service = SpotifyService
 
     useEffect(() => {
-        userService.getSavedTracks()
+        service.getSavedTracks()
     }, [])
 
     const filterHandler = (e: string) => {
         setTerm(e)
-        const list: TrackWrapper[] = savedTracks.filter(wrapper => wrapper.track.name.toLowerCase().includes(e.toLowerCase()) || wrapper.track.artists[0].name.toLowerCase().includes(e.toLowerCase()))
+        const list: SpotifyApi.SavedTrackObject[] = savedTracks.filter(wrapper => wrapper.track.name.toLowerCase().includes(e.toLowerCase()) || wrapper.track.artists[0].name.toLowerCase().includes(e.toLowerCase()))
         dispatch(setFilteredTracks(list))
     }
 
     const onRefresh = () => {
         setRefreshing(true)
-        userService.getSavedTracks()
+        service.getSavedTracks()
             .then(() => {
                 setRefreshing(false)
             })

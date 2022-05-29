@@ -5,12 +5,12 @@ import { Track } from "../types";
 import TrackDetails from "./TrackDetails";
 import { useDispatch } from 'react-redux';
 import { setLastRemovedTrack, } from "../redux/features/Tracks/TracksSlice";
-import userService from "../redux/services/userService";
+import {getService} from "../redux/services/SpotifyService";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 interface TrackCardProps {
-    track: Track
+    track: SpotifyApi.TrackObjectFull
     buttonText: string
 }
 
@@ -24,12 +24,13 @@ const TrackCard: React.FC<TrackCardProps> = ({ track, buttonText }) => {
     const isAdd = buttonText == "add";
     const isMenu = buttonText == "details"
     const dispatch = useDispatch();
+    const service = getService();
 
     const restoreHandler = () => {
         console.log("onRestoreHandler called")
-        userService.addSavedTrack(track.id)
+        service.addSavedTrack(track.id)
         .then(() => {
-            return userService.getSavedTracks()
+            return service.getSavedTracks()
         })
         .then(() => {
             dispatch(setLastRemovedTrack(null));
@@ -38,9 +39,9 @@ const TrackCard: React.FC<TrackCardProps> = ({ track, buttonText }) => {
     }
 
     const addHandler = () => {
-        userService.addSavedTrack(track.id)
+        service.addSavedTrack(track.id)
         .then(() => {
-            return userService.getSavedTracks()
+            return service.getSavedTracks()
         })
         .then(() => {
             ToastAndroid.show('Track added', ToastAndroid.SHORT);

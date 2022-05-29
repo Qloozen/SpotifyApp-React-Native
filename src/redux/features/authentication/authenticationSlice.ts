@@ -6,7 +6,7 @@ interface AuthenticationState {
     accessTokenExpirationDate: Date | undefined
     accessToken: string | undefined,
     refreshToken: string | undefined,
-    user: User | undefined,
+    user: SpotifyApi.CurrentUsersProfileResponse | undefined,
     loading: boolean
 }
 
@@ -41,7 +41,7 @@ const authenticationSlice = createSlice({
         setLoadingFalse(state) {
             state.loading = false;
         },
-        setUser(state, action: PayloadAction<User | undefined>) {
+        setUser(state, action: PayloadAction<SpotifyApi.CurrentUsersProfileResponse | undefined>) {
             state.user = action.payload;
         },
     },

@@ -3,15 +3,15 @@ import { Text, View, TextInput, Button, FlatList, StyleSheet} from "react-native
 import SearchInput from "../../Components/SearchInput";
 import TrackCard from "../../Components/TrackCard";
 import { useAppSelector } from "../../redux/hooks/hooks";
-import userService from "../../redux/services/userService";
+import {getService} from "../../redux/services/SpotifyService";
 import { globalStyles } from "../../styles/globalStyles";
 
 const SearchScreen = () => {
     const [term, setTerm] = useState("");
     const tracks = useAppSelector((state) => state.root.tracks.tracks)
-
+    const service = getService();
     const handleSearch = () => {
-        userService.searchTrack(term)
+        service.searchTrack(term)
     }
     return (
         <View style={globalStyles.container}>
