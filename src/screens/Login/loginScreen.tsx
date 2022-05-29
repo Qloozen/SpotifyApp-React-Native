@@ -22,15 +22,17 @@ const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
         console.debug("LoginScreen: onPressLogin called")
         authHandler.onLogin()
             .then(res => {
-                // Format = UTC + 1 yyyy-MM-ddThh:mm:sssZ
+                // Format = UTC +0 yyyy-MM-ddThh:mm:sssZ
+                // Duration = + 1 hour
                 const date = new Date(res!.accessTokenExpirationDate)
-                date.setHours(date.getHours() - 1)
+                date.setMinutes(date.getMinutes() - 5)
+
                 dispatch(setAccessToken(res?.accessToken))
                 dispatch(setRefreshToken(res?.refreshToken))
                 dispatch(setAccessTokenExpirationDate(date))
                 
                 if (!(res?.accessToken && res?.refreshToken && res?.accessTokenExpirationDate)) throw new Error("Login failed");
-                
+
                 return service.getMe()
             })
             .then(() => {
