@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
+
+//Nav
 import { RootStackParamList } from '../../Navigation/NavigationTypes';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 

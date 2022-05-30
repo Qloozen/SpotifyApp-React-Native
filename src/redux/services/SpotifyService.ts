@@ -32,7 +32,7 @@ class SpotifyService {
             }).then(res => {
                 console.debug("SpotifyService: token refreshed")
                 const expires = new Date()
-                expires.setMinutes(expires.getMinutes() + 2)
+                expires.setMinutes(expires.getMinutes() + 30)
                 dispatch(setAccessToken(res.data.accessToken))
                 dispatch(setAccessTokenExpirationDate(expires))
             })

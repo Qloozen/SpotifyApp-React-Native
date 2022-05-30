@@ -18,6 +18,7 @@ type loginProps = NativeStackScreenProps<RootStackParamList, "Login">
 const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
     const dispatch = useDispatch();
     const service = getService();
+    
     const handleLogin = () => {
         console.debug("LoginScreen: onPressLogin called")
         authHandler.onLogin()
@@ -25,7 +26,7 @@ const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
                 // Format = UTC +0 yyyy-MM-ddThh:mm:sssZ
                 // Duration = + 1 hour
                 const date = new Date(res!.accessTokenExpirationDate)
-                date.setMinutes(date.getMinutes() -58)
+                date.setMinutes(date.getMinutes() -30)
                 dispatch(setAccessToken(res?.accessToken))
                 dispatch(setRefreshToken(res?.refreshToken))
                 dispatch(setAccessTokenExpirationDate(date))

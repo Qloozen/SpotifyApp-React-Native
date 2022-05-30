@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, Button, FlatList, StyleSheet} from "react-native";
-import { useDispatch } from "react-redux";
+import * as constants from '../../Constants/Constants';
+
+//UI
+import { Text, View, Button, FlatList, StyleSheet} from "react-native";
 import Player from "../../Components/Player";
 import SearchInput from "../../Components/SearchInput";
 import TrackCard from "../../Components/TrackCard";
-import { setCurrentTrack, setIsPlayingFalse, setIsPlayingTrue } from "../../redux/features/Tracks/TracksSlice";
-import { useAppSelector } from "../../redux/hooks/hooks";
-import {getService} from "../../redux/services/SpotifyService";
 import { globalStyles } from "../../styles/globalStyles";
 
-const SearchScreen = () => {
+//Data
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../redux/hooks/hooks";
+import { setCurrentTrack, setIsPlayingFalse, setIsPlayingTrue } from "../../redux/features/Tracks/TracksSlice";
+import { getService } from "../../redux/services/SpotifyService";
+
+const SearchScreen: React.FC = () => {
     const [term, setTerm] = useState("");
     const tracks = useAppSelector((state) => state.root.tracks.tracks)
     const service = getService();
@@ -35,7 +40,7 @@ const SearchScreen = () => {
             <Text style={globalStyles.headerText}>Search new tracks</Text>
             <SearchInput value={term} onChangeText={setTerm} placeholder="Artists or tracks"/>
             <View style={styles.button}>
-                <Button title="Search" onPress={handleSearch} color="#1DB954" disabled={term.length < 1}/>
+                <Button title="Search" onPress={handleSearch} color={constants.MAIN_COLOR} disabled={term.length < 1}/>
             </View>
 
             <FlatList

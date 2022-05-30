@@ -1,1 +1,2 @@
-export const TEST=""
+export const MAIN_COLOR="#1DB954"
+export const DARK_GREY_BACKGROUND="#121212"

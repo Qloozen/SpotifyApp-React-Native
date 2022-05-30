@@ -1,22 +1,27 @@
 import React from 'react';
-import { useState } from 'react';
-import { View, Text, FlatList, TextInput, RefreshControl, StyleSheet, Alert } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { globalStyles } from '../../styles/globalStyles';
-import { setCurrentTrack, setFilteredTracks, setIsPlayingFalse, setIsPlayingTrue } from '../../redux/features/Tracks/TracksSlice';
+import * as constants from '../../Constants/Constants';
 
-
-import { useAppSelector } from '../../redux/hooks/hooks';
-import { useEffect } from 'react';
-import TrackCard from '../../Components/TrackCard';
+//Nav
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../Navigation/NavigationTypes';
-import SpotifyService from '../../redux/services/SpotifyService'
+
+//UI
+import { View, Text, FlatList, RefreshControl, StyleSheet, Alert } from 'react-native';
+import { globalStyles } from '../../styles/globalStyles';
+import TrackCard from '../../Components/TrackCard';
 import SearchInput from '../../Components/SearchInput';
 import Player from '../../Components/Player';
 
-type homeProps = NativeStackScreenProps<RootStackParamList, "Home">
+//Data
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../redux/hooks/hooks';
+import { setCurrentTrack, setFilteredTracks, setIsPlayingFalse, setIsPlayingTrue } from '../../redux/features/Tracks/TracksSlice';
+import SpotifyService from '../../redux/services/SpotifyService'
 
+
+type homeProps = NativeStackScreenProps<RootStackParamList, "Home">
 const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
     const savedTracks = useAppSelector((state) => state.root.tracks.savedTracks)
     const filteredTracks = useAppSelector((state) => state.root.tracks.filteredTracks)
@@ -24,27 +29,29 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
     const [term, setTerm] = useState("");
     const [refreshing, setRefreshing] = useState(false);
     const dispatch = useDispatch();
-    const service = SpotifyService
 
     useEffect(() => {
-        service.getSavedTracks()
+        SpotifyService.getSavedTracks()
     }, [])
 
-    const filterHandler = (e: string) => {
+    const handleSearch = (e: string) => {
         setTerm(e)
-        const list: SpotifyApi.SavedTrackObject[] = savedTracks.filter(wrapper => wrapper.track.name.toLowerCase().includes(e.toLowerCase()) || wrapper.track.artists[0].name.toLowerCase().includes(e.toLowerCase()))
+        const list: SpotifyApi.SavedTrackObject[] = savedTracks.filter(item => {
+            return item.track.name.toLowerCase().includes(e.toLowerCase()) 
+                || item.track.artists[0].name.toLowerCase().includes(e.toLowerCase())
+        })
         dispatch(setFilteredTracks(list))
     }
 
-    const onRefresh = () => {
+    const handleRefresh = () => {
         setRefreshing(true)
-        service.getSavedTracks()
+        SpotifyService.getSavedTracks()
             .then(() => {
                 setRefreshing(false)
             })
     }
     const handlePlay = (track: SpotifyApi.TrackObjectFull) =>{
-        service.play(track).then(() => {
+        SpotifyService.play(track).then(() => {
             dispatch(setCurrentTrack(track))
             dispatch(setIsPlayingTrue())
         }).catch(err => {
@@ -64,7 +71,7 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
         })
     }
     const handlePause = () => {
-        service.Pause().then(() => {
+        SpotifyService.Pause().then(() => {
             dispatch(setIsPlayingFalse())
         })
     }
@@ -73,19 +80,16 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
     let removedTrackCard;
     if (lastRemovedTrack) {
         removedTrackCard =
-            <View style={{ flex: 1, marginBottom: 10, height: "20%", backgroundColor: "#212121" }}>
-                <TrackCard track={lastRemovedTrack!} buttonText="restore" onPress={handlePlay}/>
+            <View style={styles.removedTrack}>
+                <TrackCard track={lastRemovedTrack} buttonText="restore" onPress={handlePlay}/>
             </View>
     }
 
 
     return (
         <View style={globalStyles.container}>
-            
             <Text style={globalStyles.headerText}>Saved Tracks</Text>
-
-            <SearchInput value={term} onChangeText={filterHandler} placeholder="Search in saved tracks"/>
-
+            <SearchInput value={term} onChangeText={handleSearch} placeholder="Search in saved tracks"/>
             <View style={globalStyles.container}>
                 <FlatList
                     data={filteredTracks}
@@ -102,20 +106,23 @@ const HomeScreen: React.FC<homeProps> = ({ navigation }) => {
                     refreshControl={
                         <RefreshControl
                             refreshing={refreshing}
-                            onRefresh={onRefresh}
+                            onRefresh={handleRefresh}
                         />
                     }
                 />
             </View>
-
-            <Player onPlay={handlePlay} onPause={handlePause}/>
-                    	
+            <Player onPlay={handlePlay} onPause={handlePause}/>       	
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-
+    removedTrack: {
+        flex: 1, 
+        marginBottom: 10, 
+        height: "20%", 
+        backgroundColor: constants.DARK_GREY_BACKGROUND
+    }
 })
 
 export default HomeScreen
